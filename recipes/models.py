@@ -9,13 +9,25 @@ from django.db import models
 # implement bit by bit. CHANGE THE BRANCH!!!
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
+    crafted_from = models.ForeignKey('Recipe', null=True, blank=True, on_delete=models.SET_NULL)
 
+    def __str__(self):
+        return self.name
+
+class Category(models.Model):
+    name=models.CharField(max_length=100)
+    parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        verbose_name_plural = "Categories"
+    
     def __str__(self):
         return self.name
 
 
 class Recipe(models.Model):
     name = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, related_name='recipes', null=True, blank=True, on_delete=models.SET_NULL)
     ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient')
 
     def __str__(self):
