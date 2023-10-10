@@ -7,15 +7,26 @@ from django.db import models
 # want to build, and the website snaps you to a page where you can see the ingredients, what planets you can find
 # them on, how much total power/storage you'll need to create them, etc. Continue with the idea from here,
 # implement bit by bit. CHANGE THE BRANCH!!!
+from django.db import models
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
+    def __str__(self):
+        return self.name
+
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
-
 class Recipe(models.Model):
     name = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, related_name='recipes', on_delete=models.CASCADE, null=True)
     ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient')
 
     def __str__(self):
@@ -24,7 +35,7 @@ class Recipe(models.Model):
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    quantity = models.FloatField()
 
     def __str__(self):
-        return f"{self.quantity} units of {self.ingredient} in {self.recipe}"
+        return f"{self.quantity} of {self.ingredient.name} in {self.recipe.name}"
