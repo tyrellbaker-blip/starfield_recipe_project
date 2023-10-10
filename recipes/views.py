@@ -5,15 +5,15 @@ from recipes.models import Recipe, RecipeIngredient
 
 
 def select_recipe(request):
-    ingredients_list = []
+    ingredients_list = []  # Initialize the variable here
+
     if request.method == 'POST':
         form = RecipeForm(request.POST)
         if form.is_valid():
             selected_recipe = form.cleaned_data['recipe']
             recipe_instance = Recipe.objects.get(id=selected_recipe.id)
             ingredients = RecipeIngredient.objects.filter(recipe=recipe_instance)
-            for ingredient in ingredients:
-                ingredients_list.append((ingredient.ingredient.name, ingredient.quantity))
+            ingredients_list = [(ingredient.ingredient.name, ingredient.quantity) for ingredient in ingredients]
     else:
         form = RecipeForm()
 
