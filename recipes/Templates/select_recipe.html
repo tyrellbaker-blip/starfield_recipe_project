@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post">
+  {% csrf_token %}
+  {{ form.category.label_tag }} {{ form.category }}
+  {{ form.recipe.label_tag }} {{ form.recipe }}
+  <button type="submit">Get Ingredients</button>
+</form>
+
+
+{% if ingredients_list %}
+  <h2>Required Ingredients:</h2>
+  <ul>
+    {% for name, quantity in ingredients_list %}
+      <li>{{ name }}: {{ quantity }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+</body>
+</html>
